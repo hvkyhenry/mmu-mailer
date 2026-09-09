@@ -1,0 +1,6 @@
+credentials/
+*.db
+__pycache__/
+.env
+.vscode/
+.venv/
