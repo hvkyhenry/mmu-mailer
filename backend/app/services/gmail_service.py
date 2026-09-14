@@ -23,9 +23,7 @@ def send_email(to: str, subject: str, html_body: str) -> dict:
     creds = Credentials.from_authorized_user_file(settings.google_token_file)
     service = build("gmail", "v1", credentials=creds)
 
-    escaped = html.escape(html_body)
-    formatted_body = f'<div style="white-space: pre-wrap; font-family: Arial, sans-serif; font-size: 14px;">{escaped}</div>'
-    message = MIMEText(formatted_body, "html")
+    message = MIMEText(html_body, "html")
     message["to"] = to
     message["from"] = f"{settings.sender_name} <{settings.sender_email}>"
     message["subject"] = subject
