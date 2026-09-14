@@ -1,16 +1,24 @@
+import { useState } from "react";
+import RichTextEditor from "./RichTextEditor";
+import EditorToolbar from "./EditorToolbar";
+
 export default function Canvas({
-  templateName,
-  setTemplateName,
-  subject,
-  setSubject,
-  body,
-  setBody,
-  columns,
-  preview,
-  sampleRow,
+  templateName, setTemplateName,
+  subject, setSubject,
+  body, setBody,
+  columns, preview, sampleRow,
 }) {
+  // Live TipTap editor instance — not React state driving a re-render,
+  // it's a mutable class instance — so the variable buttons can call
+  // editor commands directly.
+  const [editor, setEditor] = useState(null);
+
   const insertVar = (col) => {
-    setBody((b) => `${b}{{${col}}}`);
+    if (!editor) return;
+    // insertContent places text at the current cursor position, not
+    // always at the end — the flexibility upgrade over the old textarea,
+    // where variables could only ever be appended.
+    editor.chain().focus().insertContent(`{{${col}}} `).run();
   };
 
   return (
@@ -48,10 +56,13 @@ export default function Canvas({
             </button>
           ))}
         </div>
-        <textarea
-          className="body-textarea"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
+
+        <EditorToolbar editor={editor} />
+
+        <RichTextEditor
+          content={body}
+          onChange={setBody}
+          onReady={setEditor}
           placeholder="Hi {{first_name}}, welcome to MMU Tech Community..."
         />
       </div>
@@ -62,7 +73,8 @@ export default function Canvas({
             Preview — as {sampleRow?.first_name || sampleRow?.email || "sample recipient"} will see it
           </div>
           <div className="preview-subject">{preview.subject}</div>
-          <div className="preview-body">{preview.body}</div>
+          {/* Rendered as real HTML now — shows actual formatting, not raw tags as text */}
+          <div className="preview-body" dangerouslySetInnerHTML={{ __html: preview.body }} />
         </div>
       )}
     </>

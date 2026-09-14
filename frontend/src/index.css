@@ -330,9 +330,57 @@ select {
 }
 
 .preview-body {
-  white-space: pre-wrap;
   color: var(--text);
   font-size: 14.5px;
+  line-height: 1.6;
+}
+.preview-body img { max-width: 100%; border-radius: 4px; }
+.preview-body p { margin: 0 0 12px; }
+.preview-body ul, .preview-body ol { margin: 0 0 12px; padding-left: 22px; }
+
+/* Rich text editor */
+.editor-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  background: white;
+}
+.toolbar-btn {
+  background: var(--paper-dim);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 4px 10px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text);
+}
+.toolbar-btn:hover { border-color: var(--teal); }
+.toolbar-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+
+.rich-editor { min-height: 260px; }
+.rich-editor .ProseMirror {
+  min-height: 260px;
+  padding: 16px;
+  outline: none;
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+.rich-editor .ProseMirror p { margin: 0 0 12px; }
+.rich-editor .ProseMirror ul, .rich-editor .ProseMirror ol { margin: 0 0 12px; padding-left: 22px; }
+.rich-editor .ProseMirror img { max-width: 100%; border-radius: 4px; margin: 8px 0; }
+.rich-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+/* Drop target highlight — wired up in Issue #4 */
+.rich-editor.drag-over .ProseMirror {
+  background: #FBF6E8;
+  outline: 2px dashed var(--amber);
+  outline-offset: -2px;
 }
 
 .saved-templates {
